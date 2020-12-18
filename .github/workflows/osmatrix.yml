@@ -43,9 +43,12 @@ jobs:
         container: liquibase/liquibase:4.1 ## Docker Hub image that `container-job` executes in
         # Service containers to run with `container-job`
         # https://docs.github.com/en/free-pro-team@latest/actions/guides/about-service-containers#about-service-containers
+        # services: # Label used to access the service container          
+        #   redis: #running liquibase           
+        #     image: liquibase/liquibase:4.1 # Docker Hub image
         services: # Label used to access the service container          
-          redis:            
-            image: liquibase/liquibase:4.1 # Docker Hub image
+          liquibase: #running liquibase           
+            image: liquibase/liquibase:4.1 # Docker Hub image            
         steps:
         - name: Checkout
           uses: actions/checkout@v1
