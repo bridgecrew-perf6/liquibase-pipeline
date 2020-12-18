@@ -52,8 +52,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: "os fingerprinting"
-      run: hostnamectl status
+    - name: "osfingerprinting"
+      run: systeminfo | more          
     - run: npm install
     # - run: npm run build --if-present #npm ERR! enoent This is related to npm not being able to find a file.
     # - run: npm test
@@ -72,8 +72,8 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: "os fingerprinting"
-      run: hostnamectl status
+    - name: "osfingerprinting"
+      run: sw_vers          
     - run: npm install
     # - run: npm run build --if-present #npm ERR! enoent This is related to npm not being able to find a file.
     # - run: npm test
