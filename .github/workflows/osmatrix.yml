@@ -55,11 +55,18 @@ jobs:
         # - name: "os fingerprinting"
         #   run: hostnamectl status 
         - name: "uname -a"
-          run: uname -a         
-        # - name: "docker image ls"
-        #   run: docker image ls           
-        - name: "test env"
-          run: echo $URL
+          run: | 
+            docker run \ 
+            --rm -v $(pwd):$(pwd)\ liquibase/liquibase:4.1 \
+            --classpath=$(pwd)/changelogs \
+            --url=$URL \
+            --changeLogFile=$CHANGELOGFILE \
+            --username=$USERNAME \
+            --password=$PASSWORD $OPERATION                   
+        - name: "docker image ls"
+          run: docker ps -a           
+        # - name: "test env"
+        #   run: echo $URL
 
   # windows:
   #   runs-on: windows-latest
