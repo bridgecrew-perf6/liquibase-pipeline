@@ -13,7 +13,7 @@ on:
 jobs:
 
   linux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest #Ubuntu 18.04.5 LTS
     steps:
     - name: Checkout
       uses: actions/checkout@v1
@@ -49,8 +49,10 @@ jobs:
         steps:
         - name: Checkout
           uses: actions/checkout@v1
-        - name: "os fingerprinting"
-          run: hostnamectl status 
+        # - name: "os fingerprinting"
+        #   run: hostnamectl status 
+        - name: "uname -a"
+          run: uname -a         
         - name: "docker image ls"
           run: docker image ls           
         - name: "test env"
