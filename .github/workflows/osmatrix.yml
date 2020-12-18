@@ -5,9 +5,12 @@ name: osmatrix
 
 on:
   push:
-    branches: [ test ]
+    branches: [ main ]
   pull_request:
-    branches: [ test ]
+    branches: [ main ]
+  schedule:
+    - cron:  '*/15 * * * *' #15 mins interval
+    # - cron:  '0 8,18 * * *' #execute at 8 AM and 6 PM daily
 
 
 jobs:
