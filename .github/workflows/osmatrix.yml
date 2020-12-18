@@ -5,117 +5,131 @@ name: osmatrix
 
 on:
   push:
-    branches: [ dev ]
-  pull_request:
-    branches: [ dev ]
+    branches: [ githubactions_powershell ]
+  # pull_request:
+  #   branches: [ githubactions_powershell ]
 
 
 jobs:
 
-  linux:
-    runs-on: ubuntu-latest #Ubuntu 18.04.5 LTS
+  pester-test:
+    name: "Test PowerShell on Ubuntu"
+    runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v1
-    - name: "os fingerprinting"
-      run: hostnamectl status
+    - name: "Check out repository code"
+      uses: actions/checkout@v2
+    - name: "Perform a Pester test from the command-line"
+      shell: pwsh
+      run: Test-Path resultsfile.log | Should -Be $true
+    - name: "Perform a Pester test from the Tests.ps1 file"
+      shell: pwsh
+      run: |
+        Invoke-Pester Unit.Tests.ps1 -Passthru
 
-# https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-nodejs
-  linux-node-js:
-    runs-on: ubuntu-latest #Ubuntu 18.04.5 LTS
-    strategy:
-      matrix:
-        node-version: [8.x, 10.x, 12.x]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: "os fingerprinting"
-      run: hostnamectl status
-    - run: npm install
-    # - run: npm run build --if-present #npm ERR! enoent This is related to npm not being able to find a file.
-    # - run: npm test
-      env:
-        CI: true
+#   linux:
+#     runs-on: ubuntu-latest #Ubuntu 18.04.5 LTS
+#     steps:
+#     - name: Checkout
+#       uses: actions/checkout@v1
+#     - name: "os fingerprinting"
+#       run: hostnamectl status
 
-# https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-nodejs
-  windows-node-js:
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        node-version: [8.x, 10.x, 12.x]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: "osfingerprinting"
-      run: systeminfo | more          
-    - run: npm install
-    # - run: npm run build --if-present #npm ERR! enoent This is related to npm not being able to find a file.
-    # - run: npm test
-      env:
-        CI: true
+# # https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-nodejs
+#   linux-node-js:
+#     runs-on: ubuntu-latest #Ubuntu 18.04.5 LTS
+#     strategy:
+#       matrix:
+#         node-version: [8.x, 10.x, 12.x]
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Use Node.js ${{ matrix.node-version }}
+#       uses: actions/setup-node@v1
+#       with:
+#         node-version: ${{ matrix.node-version }}
+#     - name: "os fingerprinting"
+#       run: hostnamectl status
+#     - run: npm install
+#     # - run: npm run build --if-present #npm ERR! enoent This is related to npm not being able to find a file.
+#     # - run: npm test
+#       env:
+#         CI: true
 
-# https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-nodejs
-  macos-node-js:
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        node-version: [8.x, 10.x, 12.x]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: "osfingerprinting"
-      run: sw_vers          
-    - run: npm install
-    # - run: npm run build --if-present #npm ERR! enoent This is related to npm not being able to find a file.
-    # - run: npm test
-      env:
-        CI: true
+# # https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-nodejs
+#   windows-node-js:
+#     runs-on: windows-latest
+#     strategy:
+#       matrix:
+#         node-version: [8.x, 10.x, 12.x]
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Use Node.js ${{ matrix.node-version }}
+#       uses: actions/setup-node@v1
+#       with:
+#         node-version: ${{ matrix.node-version }}
+#     - name: "osfingerprinting"
+#       run: systeminfo | more          
+#     - run: npm install
+#     # - run: npm run build --if-present #npm ERR! enoent This is related to npm not being able to find a file.
+#     # - run: npm test
+#       env:
+#         CI: true
+
+# # https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-nodejs
+#   macos-node-js:
+#     runs-on: macos-latest
+#     strategy:
+#       matrix:
+#         node-version: [8.x, 10.x, 12.x]
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Use Node.js ${{ matrix.node-version }}
+#       uses: actions/setup-node@v1
+#       with:
+#         node-version: ${{ matrix.node-version }}
+#     - name: "osfingerprinting"
+#       run: sw_vers          
+#     - run: npm install
+#     # - run: npm run build --if-present #npm ERR! enoent This is related to npm not being able to find a file.
+#     # - run: npm test
+#       env:
+#         CI: true
 
 
-  ubuntu-2004:
-      runs-on: ubuntu-20.04
-      steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-      - name: "os fingerprinting"
-        run: hostnamectl status
+#   ubuntu-2004:
+#       runs-on: ubuntu-20.04
+#       steps:
+#       - name: Checkout
+#         uses: actions/checkout@v1
+#       - name: "os fingerprinting"
+#         run: hostnamectl status
       
 
-  ubuntu-1804:
-        # Environment variables
-        # https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables#default-environment-variables
-        env:
-          # FIRST_NAME: Mona
-          OPERATION: "update"
-          CHANGELOGFILE: "samplechangelog.h2.sql"
-          USERNAME: "liquibase"
-          PASSWORD: "password"
-          URL: "jdbc:h2:file:./example/h2tutorial"
-        runs-on: ubuntu-18.04
-        container: liquibase/liquibase:4.1 ## Docker Hub image that `container-job` executes in
-        # Service containers to run with `container-job`
-        # https://docs.github.com/en/free-pro-team@latest/actions/guides/about-service-containers#about-service-containers
-        # services: # Label used to access the service container          
-        #   redis: #running liquibase           
-        #     image: liquibase/liquibase:4.1 # Docker Hub image
-        services: # Label used to access the service container          
-          liquibase: #running liquibase           
-            image: liquibase/liquibase:4.1 # Docker Hub image
-        # runs: 
-        #   using: 'docker'
-        #   image: 'docker://debian:stretch-slim'
-        steps:
-        - name: Checkout
-          uses: actions/checkout@v1
+#   ubuntu-1804:
+#         # Environment variables
+#         # https://docs.github.com/en/free-pro-team@latest/actions/reference/environment-variables#default-environment-variables
+#         env:
+#           # FIRST_NAME: Mona
+#           OPERATION: "update"
+#           CHANGELOGFILE: "samplechangelog.h2.sql"
+#           USERNAME: "liquibase"
+#           PASSWORD: "password"
+#           URL: "jdbc:h2:file:./example/h2tutorial"
+#         runs-on: ubuntu-18.04
+#         container: liquibase/liquibase:4.1 ## Docker Hub image that `container-job` executes in
+#         # Service containers to run with `container-job`
+#         # https://docs.github.com/en/free-pro-team@latest/actions/guides/about-service-containers#about-service-containers
+#         # services: # Label used to access the service container          
+#         #   redis: #running liquibase           
+#         #     image: liquibase/liquibase:4.1 # Docker Hub image
+#         services: # Label used to access the service container          
+#           liquibase: #running liquibase           
+#             image: liquibase/liquibase:4.1 # Docker Hub image
+#         # runs: 
+#         #   using: 'docker'
+#         #   image: 'docker://debian:stretch-slim'
+#         steps:
+#         - name: Checkout
+#           uses: actions/checkout@v1
         # - name: "os fingerprinting"
         #   run: hostnamectl status 
         # - name: "docker run"
