@@ -53,8 +53,8 @@ jobs:
         #   run: hostnamectl status 
         - name: "uname -a"
           run: uname -a         
-        - name: "docker image ls"
-          run: docker image ls           
+        # - name: "docker image ls"
+        #   run: docker image ls           
         - name: "test env"
           run: echo $URL
 
