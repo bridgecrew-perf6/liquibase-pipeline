@@ -20,6 +20,26 @@ jobs:
     - name: "os fingerprinting"
       run: hostnamectl status
 
+  linux-node-js:
+    runs-on: ubuntu-latest #Ubuntu 18.04.5 LTS
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: "os fingerprinting"
+      run: hostnamectl status
+    - run: npm install
+    - run: npm run build --if-present
+    - run: npm test
+      env:
+        CI: true
+
+
   ubuntu-2004:
       runs-on: ubuntu-20.04
       steps:
@@ -48,23 +68,26 @@ jobs:
         #     image: liquibase/liquibase:4.1 # Docker Hub image
         services: # Label used to access the service container          
           liquibase: #running liquibase           
-            image: liquibase/liquibase:4.1 # Docker Hub image            
+            image: liquibase/liquibase:4.1 # Docker Hub image
+        # runs: 
+        #   using: 'docker'
+        #   image: 'docker://debian:stretch-slim'
         steps:
         - name: Checkout
           uses: actions/checkout@v1
         # - name: "os fingerprinting"
         #   run: hostnamectl status 
-        - name: "uname -a"
-          run: | 
-            docker run \ 
-            --rm -v $(pwd):$(pwd)\ liquibase/liquibase:4.1 \
-            --classpath=$(pwd)/changelogs \
-            --url=$URL \
-            --changeLogFile=$CHANGELOGFILE \
-            --username=$USERNAME \
-            --password=$PASSWORD $OPERATION                   
-        - name: "docker image ls"
-          run: docker ps -a           
+        # - name: "docker run"
+        #   run: | 
+        #       docker run \ 
+        #       --rm -v $(pwd):$(pwd)\ liquibase/liquibase:4.1 \
+        #       --classpath=$(pwd)/changelogs \
+        #       --url=$URL \
+        #       --changeLogFile=$CHANGELOGFILE \
+        #       --username=$USERNAME \
+        #       --password=$PASSWORD $OPERATION
+        # - name: "docker ps -a"
+        #   run: docker ps -a           
         # - name: "test env"
         #   run: echo $URL
 
