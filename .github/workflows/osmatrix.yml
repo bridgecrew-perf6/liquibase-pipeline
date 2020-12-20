@@ -13,50 +13,63 @@ on:
 jobs:
 
 # https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-powershell
-  pester-test:
-    name: "Test PowerShell on Ubuntu"
-    runs-on: ubuntu-latest
-    steps:
-    - name: "Check out repository code"
-      uses: actions/checkout@v2
-    # - name: "Perform a Pester test from the command-line"
-    #   shell: pwsh
-    #   run: Test-Path resultsfile.log | Should -Be $true
-    - name: "Perform a Pester test from the Tests.ps1 file"
-      shell: pwsh
-      run: |
-        Invoke-Pester Unit.Tests.ps1 -Passthru
+  # pester-test:
+  #   name: "Test PowerShell on Ubuntu"
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: "Check out repository code"
+  #     uses: actions/checkout@v2
+  #   # - name: "Perform a Pester test from the command-line"
+  #   #   shell: pwsh
+  #   #   run: Test-Path resultsfile.log | Should -Be $true
+  #   - name: "Perform a Pester test from the Tests.ps1 file"
+  #     shell: pwsh
+  #     run: |
+  #       Invoke-Pester Unit.Tests.ps1 -Passthru
 
 
-  linux:
-    needs: pester-test
+  # linux:
+  #   needs: pester-test
+  #   runs-on: ubuntu-latest #Ubuntu 18.04.5 LTS
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v1
+  #   - name: "os fingerprinting"
+  #     run: hostnamectl status
+
+
+  linux-zap-scan:
     runs-on: ubuntu-latest #Ubuntu 18.04.5 LTS
     steps:
     - name: Checkout
       uses: actions/checkout@v1
     - name: "os fingerprinting"
       run: hostnamectl status
+    - name: "ZAP Scan"
+      uses: zaproxy/action-baseline@v0.4.0
+      with:
+        target: 'https://www.zaproxy.org'        
 
 # https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-nodejs
-  linux-node-js:
-    needs: [pester-test, linux]
-    runs-on: ubuntu-latest #Ubuntu 18.04.5 LTS
-    strategy:
-      matrix:
-        node-version: [8.x, 10.x, 12.x]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: "os fingerprinting"
-      run: hostnamectl status
-    - run: npm install
-    # - run: npm run build --if-present #npm ERR! enoent This is related to npm not being able to find a file.
-    # - run: npm test
-      env:
-        CI: true
+  # linux-node-js:
+  #   needs: [pester-test, linux] # in order
+  #   runs-on: ubuntu-latest #Ubuntu 18.04.5 LTS
+  #   strategy:
+  #     matrix:
+  #       node-version: [8.x, 10.x, 12.x]
+  #   steps:
+  #   - uses: actions/checkout@v2
+  #   - name: Use Node.js ${{ matrix.node-version }}
+  #     uses: actions/setup-node@v1
+  #     with:
+  #       node-version: ${{ matrix.node-version }}
+  #   - name: "os fingerprinting"
+  #     run: hostnamectl status
+  #   - run: npm install
+  #   # - run: npm run build --if-present #npm ERR! enoent This is related to npm not being able to find a file.
+  #   # - run: npm test
+  #     env:
+  #       CI: true
 
 # # https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-nodejs
 #   windows-node-js:
