@@ -37,19 +37,7 @@ jobs:
   #   - name: "os fingerprinting"
   #     run: hostnamectl status
 
-
-# https://github.com/marketplace/actions/owasp-zap-baseline-scan
-  linux-zap-scan:
-    runs-on: ubuntu-latest #Ubuntu 18.04.5 LTS
-    steps:
-    # - name: Checkout
-    #   uses: actions/checkout@v1
-    - name: "os fingerprinting"
-      run: hostnamectl status
-    - name: "ZAP Scan"
-      uses: zaproxy/action-baseline@v0.4.0
-      with:
-        target: 'https://www.zaproxy.org'        
+      
 
 # https://docs.github.com/en/free-pro-team@latest/actions/guides/building-and-testing-nodejs
   # linux-node-js:
